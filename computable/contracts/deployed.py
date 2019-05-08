@@ -10,18 +10,19 @@ class Deployed:
         """
         self.account = acct
 
-    def assign_transact_opts(self, src, opts):
+    def assign_transact_opts(self, src, opts=None):
         """
         @param src Dict which will be returned after being hydrated with any
         passed in params or defaults
-        @param opts Dict which may contain any number of transact opts
+        @param opts Optional dict which may contain any number of transact opts.
+        If not passed, the src object is simply returned
         """
         if opts is not None:
-            if opts['from'] is None:
+            if 'from' not in opts:
                 opts['from'] = self.account
-            if opts['gas'] is None:
+            if 'gas' not in opts:
                 opts['gas'] = GAS
-            if opts['gas_price'] is None:
+            if 'gas_price' not in opts:
                 opts['gas_price'] = GAS_PRICE
             opts.update(src)
             return opts
@@ -37,14 +38,7 @@ class Deployed:
             address=params['address'],
             abi=params['abi']
             )
-        # we'll use the more succinct syntax of the concise class
-        self.deployed = ConciseContract(c)
+        # we'll use the full contract object in our HOCs
+        self.deployed = c
         # hoist address for easy access
         self.address = params['address']
-
-    def require_account(self, opts):
-        """
-        @param opts Dict to check for the presence of an address
-        @return An Ethereum address
-        """
-        return opts['from'] or self.account

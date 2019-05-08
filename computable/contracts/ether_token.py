@@ -1,8 +1,8 @@
 import os
 import json
-from computable.contracts.deployed import Deployed
+from computable.contracts.erc20 import ERC20
 
-class EtherToken(Deployed):
+class EtherToken(ERC20):
     def at(self, w3, address):
         abi = None
         path = os.path.join(os.path.dirname(__file__), 'ethertoken.abi')
@@ -13,12 +13,13 @@ class EtherToken(Deployed):
         else:
             raise ValueError('ABI json file not loaded')
 
-    def allowance(self, owner, spender):
-        return self.deployed.allowance(owner, spender)
+    def deposit(self, amount, opts):
+        """
+        @param amount An amount of ETH, in wei, sent as msg.value
+        """
+        opts = self.assign_transact_opts({'value': amount}, opts)
+        return self.deployed.functions.deposit().transact(opts)
 
-    def approve(self, spender, amount, opts):
+    def withdraw(self, amount, opts):
         opts = self.assign_transact_opts({}, opts)
-        self.deployed.approve(spender, amount, transact=opts)
-
-    def balanceOf(self, owner):
-        return self.deployed.balanceOf(owner)
+        return self.deployed.functions.withdraw(amount).transact(opts)

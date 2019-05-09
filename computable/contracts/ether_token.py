@@ -1,17 +1,8 @@
-import os
-import json
 from computable.contracts.erc20 import ERC20
 
 class EtherToken(ERC20):
     def at(self, w3, address):
-        abi = None
-        path = os.path.join(os.path.dirname(__file__), 'ethertoken.abi')
-        with open(path) as f:
-            abi = json.loads(f.read())
-        if abi is not None:
-            super().at(w3, {'address': address, 'abi': abi})
-        else:
-            raise ValueError('ABI json file not loaded')
+        super().at(w3, address, 'ethertoken.abi')
 
     def deposit(self, amount, opts):
         """

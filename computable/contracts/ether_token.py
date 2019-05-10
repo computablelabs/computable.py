@@ -7,10 +7,15 @@ class EtherToken(ERC20):
     def deposit(self, amount, opts):
         """
         @param amount An amount of ETH, in wei, sent as msg.value
+        @param opts Transact Opts for this send type method
         """
         opts = self.assign_transact_opts({'value': amount}, opts)
         return self.deployed.functions.deposit().transact(opts)
 
     def withdraw(self, amount, opts):
+        """
+        @param amount An amount of ETH, in wei, to withdraw from this contract
+        by its owner
+        """
         opts = self.assign_transact_opts({}, opts)
         return self.deployed.functions.withdraw(amount).transact(opts)

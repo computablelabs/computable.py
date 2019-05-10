@@ -1,5 +1,3 @@
-import os
-import json
 from computable.contracts.deployed import Deployed
 
 class ERC20(Deployed):

@@ -5,6 +5,7 @@ import web3
 from web3 import Web3
 from computable.contracts.ether_token import EtherToken
 from computable.contracts.market_token import MarketToken
+from computable.contracts.voting import Voting
 
 
 @pytest.fixture(scope='module')
@@ -50,3 +51,17 @@ def market_token(w3, market_token_opts):
     market_token = MarketToken(w3.eth.defaultAccount)
     market_token.at(w3, tx_rcpt['contractAddress'])
     return market_token
+
+@pytest.fixture(scope='module')
+def voting(w3, market_token):
+    contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
+    with open(os.path.join(contract_path, 'voting.abi')) as f:
+        abi = json.loads(f.read())
+    with open(os.path.join(contract_path, 'voting.bin')) as f:
+        bc = f.read()
+    v = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
+    tx_hash = v.constructor(market_token.address).transact()
+    tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
+    voting = Voting(w3.eth.defaultAccount)
+    voting.at(w3, tx_rcpt['contractAddress'])
+    return voting

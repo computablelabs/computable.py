@@ -1,6 +1,6 @@
 import os
 import json
-from computable.contracts.constants import GAS, GAS_PRICE
+from computable.contracts.constants import GAS_PRICE, MIN_GAS, GAS_BUFFER
 
 
 class Deployed:
@@ -13,22 +13,17 @@ class Deployed:
 
     def assign_transact_opts(self, src, opts=None):
         """
-        @param src Dict which will be returned after being hydrated with any
-        passed in params or defaults
-        @param opts Optional dict which may contain any number of transact opts.
-        If not passed, the src object is simply returned
+        @param src Dict containing any class hydrated transact opts
+        @param opts Optional dict containing any user-supplied transact opts
         """
+        if 'from' not in src:
+            src['from'] = self.account
+        if 'gas_price' not in src:
+            src['gas_price'] = GAS_PRICE
+
         if opts is not None:
-            if 'from' not in opts:
-                opts['from'] = self.account
-            if 'gas' not in opts:
-                opts['gas'] = GAS
-            if 'gas_price' not in opts:
-                opts['gas_price'] = GAS_PRICE
-            opts.update(src)
-            return opts
-        else:
-            return src
+            src.update(opts)
+        return src
 
     def at(self, w3, address, filename):
         """
@@ -51,3 +46,17 @@ class Deployed:
         self.deployed = c
         # hoist address for easy access
         self.address = address
+        # remember the abi so we can fetch gas prices from it
+        self.abi = abi
+
+    def get_gas(self, method):
+        """
+        Given the name of a method on this class, fetch the gas cost approximated by the abi.
+        NOTE: If no gas is found we will return the value for the constant GAS
+        """
+        gas = MIN_GAS
+        for o in self.abi:
+            if 'name' in o and o['name'] == method:
+                gas = o['gas']
+                break
+        return gas + GAS_BUFFER

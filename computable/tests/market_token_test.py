@@ -8,5 +8,5 @@ def test_deploy(market_token):
     assert market_token.account != market_token.address
 
 def test_initial_balance(market_token):
-    owner_bal = market_token.balanceOf(market_token.account)
+    owner_bal = market_token.balance_of(market_token.account)
     assert owner_bal == Web3.toWei(2, 'ether')

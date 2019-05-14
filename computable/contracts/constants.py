@@ -8,3 +8,17 @@ MIN_GAS = 21000
 GAS_BUFFER = 100000
 
 SECONDS_IN_A_DAY = 86400
+
+# parameterizer attributes are integers
+STAKE = 1
+PRICE_FLOOR = 2
+SPREAD = 4
+LIST_REWARD = 5
+PLURALITY = 6
+VOTE_BY = 7
+BACKEND_PAYMENT = 8
+MAKER_PAYMENT = 9
+COST_PER_BYTE = 11
+
+# sole candidate 'kind' know to the parameterizer
+REPARAM = 3

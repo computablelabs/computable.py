@@ -6,3 +6,5 @@ GAS_PRICE = Web3.toWei(2, 'gwei')
 MIN_GAS = 21000
 # web3 will buffer estimated gas amounts by 100k so we'll do the same
 GAS_BUFFER = 100000
+
+SECONDS_IN_A_DAY = 86400

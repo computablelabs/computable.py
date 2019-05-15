@@ -1,12 +1,13 @@
 from web3 import Web3
 
-# why does web3.py use camelCase?
+# gas related
 GAS_PRICE = Web3.toWei(2, 'gwei')
 # min amount of gas for any operation, used for call types as we don't pull that gas from the ABI
 MIN_GAS = 21000
 # web3 will buffer estimated gas amounts by 100k so we'll do the same
 GAS_BUFFER = 100000
 
+# time based
 SECONDS_IN_A_DAY = 86400
 
 # parameterizer attributes are integers
@@ -20,5 +21,8 @@ BACKEND_PAYMENT = 8
 MAKER_PAYMENT = 9
 COST_PER_BYTE = 11
 
-# sole candidate 'kind' know to the parameterizer
+# voting candidate 'kinds'
+APPLICATION = 1
+CHALLENGE = 2
 REPARAM = 3
+REGISTRATION = 4

@@ -62,10 +62,10 @@ class Parameterizer(Deployed):
         opts = self.assign_transact_opts({'gas': self.get_gas('getVoteBy')}, opts)
         return self.deployed.functions.getVoteBy().call(opts)
 
-    def reparameterize(self, param, value, opts):
+    def reparameterize(self, param, value, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('reparameterize')}, opts)
         return self.deployed.functions.reparameterize(param, value).transact(opts)
 
-    def resolveReparam(self, hash, opts):
+    def resolveReparam(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('resolveReparam')}, opts)
         return self.deployed.functions.resolveReparam(hash).transact(opts)

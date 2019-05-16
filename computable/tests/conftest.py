@@ -8,6 +8,7 @@ from computable.contracts.ether_token import EtherToken
 from computable.contracts.market_token import MarketToken
 from computable.contracts.voting import Voting
 from computable.contracts.parameterizer import Parameterizer
+from computable.contracts.investing import Investing
 
 @pytest.fixture(scope='module')
 def test_provider():
@@ -30,13 +31,13 @@ def ether_token(w3, ether_token_opts):
         abi = json.loads(f.read())
     with open(os.path.join(contract_path, 'ethertoken.bin')) as f:
         bc = f.read()
-    token = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
-    tx_hash = token.constructor(w3.eth.defaultAccount,
+    t = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
+    tx_hash = t.constructor(w3.eth.defaultAccount,
         ether_token_opts['init_bal']).transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
-    ether_token = EtherToken(w3.eth.defaultAccount)
-    ether_token.at(w3, tx_rcpt['contractAddress'])
-    return ether_token
+    token = EtherToken(w3.eth.defaultAccount)
+    token.at(w3, tx_rcpt['contractAddress'])
+    return token
 
 @pytest.fixture(scope='module')
 def market_token_opts():
@@ -49,13 +50,13 @@ def market_token(w3, market_token_opts):
         abi = json.loads(f.read())
     with open(os.path.join(contract_path, 'markettoken.bin')) as f:
         bc = f.read()
-    token = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
-    tx_hash = token.constructor(w3.eth.defaultAccount,
+    t = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
+    tx_hash = t.constructor(w3.eth.defaultAccount,
         market_token_opts['init_bal']).transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
-    market_token = MarketToken(w3.eth.defaultAccount)
-    market_token.at(w3, tx_rcpt['contractAddress'])
-    return market_token
+    token = MarketToken(w3.eth.defaultAccount)
+    token.at(w3, tx_rcpt['contractAddress'])
+    return token
 
 @pytest.fixture(scope='module')
 def voting(w3, market_token):
@@ -67,9 +68,9 @@ def voting(w3, market_token):
     v = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = v.constructor(market_token.address).transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
-    voting = Voting(w3.eth.defaultAccount)
-    voting.at(w3, tx_rcpt['contractAddress'])
-    return voting
+    vg = Voting(w3.eth.defaultAccount)
+    vg.at(w3, tx_rcpt['contractAddress'])
+    return vg
 
 @pytest.fixture(scope='module')
 def parameterizer_opts():
@@ -109,3 +110,18 @@ def parameterizer(w3, voting, parameterizer_opts):
     p11r = Parameterizer(w3.eth.defaultAccount)
     p11r.at(w3, tx_rcpt['contractAddress'])
     return p11r
+
+@pytest.fixture(scope='module')
+def investing(w3, ether_token, market_token, parameterizer):
+    contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
+    with open(os.path.join(contract_path, 'investing.abi')) as f:
+        abi = json.loads(f.read())
+    with open(os.path.join(contract_path, 'investing.bin')) as f:
+        bc = f.read()
+    i = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
+    tx_hash = i.constructor(ether_token.address, market_token.address, 
+            parameterizer.address).transact()
+    tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
+    inv = Investing(w3.eth.defaultAccount)
+    inv.at(w3, tx_rcpt['contractAddress'])
+    return inv

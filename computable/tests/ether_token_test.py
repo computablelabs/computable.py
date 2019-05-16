@@ -3,7 +3,6 @@ import web3
 from web3 import Web3
 from computable.contracts.constants import GAS_BUFFER
 
-
 def test_deploy(ether_token):
     assert len(ether_token.account) == 42
     assert len(ether_token.address) == 42

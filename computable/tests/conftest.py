@@ -10,8 +10,12 @@ from computable.contracts.voting import Voting
 from computable.contracts.parameterizer import Parameterizer
 
 @pytest.fixture(scope='module')
-def w3():
-    instance = Web3(Web3.EthereumTesterProvider())
+def test_provider():
+    return Web3.EthereumTesterProvider()
+
+@pytest.fixture(scope='module')
+def w3(test_provider):
+    instance = Web3(test_provider)
     instance.eth.defaultAccount = instance.eth.accounts[0] # our test 'owner' account
     return instance
 
@@ -74,7 +78,7 @@ def parameterizer_opts():
                 'spread': 110,
                 'list_reward': Web3.toWei(250, 'szabo'),
                 'stake': Web3.toWei(10, 'finney'),
-                'vote_by': SECONDS_IN_A_DAY * 3,
+                'vote_by': 100,
                 'plurality': 50,
                 'backend_payment': 25,
                 'maker_payment': 25,

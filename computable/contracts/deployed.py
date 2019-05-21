@@ -25,11 +25,12 @@ class Deployed:
             src.update(opts)
         return src
 
-    def at(self, w3, address, filename):
+    def at(self, w3, address, filename, chain_id=None):
         """
         @param w3 An instance of Web3
         @param address EVM address of a deployed contract
         @param filename Name (with extension) of an abi file to read.
+        @param chain_id Identifier of the block chain this contract is one (or None)
         NOTE: We expect the file to be read to be a sibling to this file (same dir)
         """
         abi = None
@@ -48,6 +49,13 @@ class Deployed:
         self.address = address
         # remember the abi so we can fetch gas prices from it
         self.abi = abi
+        # set the passed in chainId or default
+        self.chain_id = chain_id
+
+    def extend_transact_opts(self, w3, opts):
+        opts['nonce'] = w3.eth.getTransactionCount(opts['from'])
+        opts['chainId'] = self.chain_id
+        return opts
 
     def get_gas(self, method):
         """

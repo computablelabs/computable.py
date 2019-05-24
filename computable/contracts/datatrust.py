@@ -9,26 +9,26 @@ class Datatrust(Deployed):
         @param listing Address
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('setPrivileged')}, opts)
-        return self.deployed.functions.setPrivileged(listing).transact(opts)
+        return self.deployed.functions.setPrivileged(listing), opts
 
     def get_privileged(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getPrivileged')}, opts)
-        return self.deployed.functions.getPrivileged().call(opts)
+        return self.deployed.functions.getPrivileged(), opts
 
     def get_hash(self, url, opts=None):
         """
         @param url String (max 128 chars) which is the url of a datatrust
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('getHash')}, opts)
-        return self.deployed.functions.getHash(url).call(opts)
+        return self.deployed.functions.getHash(url), opts
 
     def get_backend_address(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getBackendAddress')}, opts)
-        return self.deployed.functions.getBackendAddress().call(opts)
+        return self.deployed.functions.getBackendAddress(), opts
 
     def get_backend_url(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getBackendUrl')}, opts)
-        return self.deployed.functions.getBackendUrl().call(opts)
+        return self.deployed.functions.getBackendUrl(), opts
 
     def set_backend_url(self, url, opts=None):
         """
@@ -36,7 +36,7 @@ class Datatrust(Deployed):
         @param url String (max 128 chars) which is the url of a datatrust
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('setBackendUrl')}, opts)
-        return self.deployed.functions.setBackendUrl(url).transact(opts)
+        return self.deployed.functions.setBackendUrl(url), opts
 
     def set_data_hash(self, listing, data, opts=None):
         """
@@ -44,39 +44,39 @@ class Datatrust(Deployed):
         @param data A keccack256 hash of the actual data for said listing
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('setDataHash')}, opts)
-        return self.deployed.functions.setDataHash(listing, data).transact(opts)
+        return self.deployed.functions.setDataHash(listing, data), opts
 
     def register(self, url, opts=None):
         """
         @param url String (max 128 chars) which is the url of a datatrust
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('register')}, opts)
-        return self.deployed.functions.register(url).transact(opts)
+        return self.deployed.functions.register(url), opts
 
     def resolve_registration(self, hash, opts=None):
         """
         @param hash Keccack256 hash of the registration candidate's URL
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('resolveRegistration')}, opts)
-        return self.deployed.functions.resolveRegistration(hash).transact(opts)
+        return self.deployed.functions.resolveRegistration(hash), opts
 
     def request_delivery(self, hash, amount, opts=None):
         """
         @param hash Keccack256 hash of a delivery-query recieved from a demand buyer
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('requestDelivery')}, opts)
-        return self.deployed.functions.requestDelivery(hash, amount).transact(opts)
+        return self.deployed.functions.requestDelivery(hash, amount), opts
 
     def get_bytes_purchased(self, addr, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getBytesPurchased')}, opts)
-        return self.deployed.functions.getBytesPurchased(addr).call(opts)
+        return self.deployed.functions.getBytesPurchased(addr), opts
 
     def get_delivery(self, hash, opts=None):
         """
         @return (owner, bytes_requested, bytes_delivered)
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('getDelivery')}, opts)
-        return self.deployed.functions.getDelivery(hash).call(opts)
+        return self.deployed.functions.getDelivery(hash), opts
 
     def listing_accessed(self, listing, delivery, amount, opts=None):
         """
@@ -85,7 +85,7 @@ class Datatrust(Deployed):
         @param amount Number of bytes accessed from said listing
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('listingAccessed')}, opts)
-        return self.deployed.functions.listingAccessed(listing, delivery, amount).transact(opts)
+        return self.deployed.functions.listingAccessed(listing, delivery, amount), opts
 
     def get_bytes_accessed(self, hash, opts=None):
         """
@@ -93,7 +93,7 @@ class Datatrust(Deployed):
         @param hash Keccack256 hash Listing identifier
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('getBytesAccessed')}, opts)
-        return self.deployed.functions.getBytesAccessed(hash).call(opts)
+        return self.deployed.functions.getBytesAccessed(hash), opts
 
     def delivered(self, delivery, url, opts=None):
         """
@@ -102,4 +102,4 @@ class Datatrust(Deployed):
         """
         # TODO we could check length of the url here and raise...
         opts = self.assign_transact_opts({'gas': self.get_gas('delivered')}, opts)
-        return self.deployed.functions.delivered(delivery, url).transact(opts)
+        return self.deployed.functions.delivered(delivery, url), opts

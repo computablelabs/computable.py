@@ -13,16 +13,16 @@ class Voting(Deployed):
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('setPrivileged')}, opts)
         return self.deployed.functions.setPrivileged(parameterizer, datatrust,
-                listing, investing).transact(opts)
+                listing, investing), opts
 
     def get_privileged(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getPrivileged')}, opts)
-        return self.deployed.functions.getPrivileged().call(opts)
+        return self.deployed.functions.getPrivileged(), opts
 
     def has_privilege(self, addr, opts=None):
         # TODO change the casing when the abi is fixed
         opts = self.assign_transact_opts({'gas': self.get_gas('has_privilege')}, opts)
-        return self.deployed.functions.has_privilege(addr).call(opts)
+        return self.deployed.functions.has_privilege(addr), opts
 
     def candidate_is(self, hash, kind, opts=None):
         """
@@ -30,30 +30,30 @@ class Voting(Deployed):
         @param opts Optional callOpts for this view/constant type call
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('candidateIs')}, opts)
-        return self.deployed.functions.candidateIs(hash, kind).call(opts)
+        return self.deployed.functions.candidateIs(hash, kind), opts
 
     def is_candidate(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('isCandidate')}, opts)
-        return self.deployed.functions.isCandidate(hash).call(opts)
+        return self.deployed.functions.isCandidate(hash), opts
 
     def get_candidate(self, hash, opts=None):
         """
         @return (kind, owner, stake, vote_by, yea, nay)
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('getCandidate')}, opts)
-        return self.deployed.functions.getCandidate(hash).call(opts)
+        return self.deployed.functions.getCandidate(hash), opts
 
     def get_candidate_owner(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getCandidateOwner')}, opts)
-        return self.deployed.functions.getCandidateOwner(hash).call(opts)
+        return self.deployed.functions.getCandidateOwner(hash), opts
 
     def did_pass(self, hash, plurality, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('didPass')}, opts)
-        return self.deployed.functions.didPass(hash, plurality).call(opts)
+        return self.deployed.functions.didPass(hash, plurality), opts
 
     def poll_closed(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('pollClosed')}, opts)
-        return self.deployed.functions.pollClosed(hash).call(opts)
+        return self.deployed.functions.pollClosed(hash), opts
 
     def vote(self, hash, option, opts=None):
         """
@@ -61,7 +61,7 @@ class Voting(Deployed):
         which is translated as a "nay"
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('vote')}, opts)
-        return self.deployed.functions.vote(hash, option).transact(opts)
+        return self.deployed.functions.vote(hash, option), opts
 
     def get_stake(self, hash, addr, opts=None):
         """
@@ -69,11 +69,11 @@ class Voting(Deployed):
         @return Staked amount in wei
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('getStake')}, opts)
-        return self.deployed.functions.getStake(hash, addr).call(opts)
+        return self.deployed.functions.getStake(hash, addr), opts
 
     def unstake(self, hash, opts=None):
         """
         Claim any staked amounts that an address has rights to
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('unstake')}, opts)
-        return self.deployed.functions.unstake(hash).transact(opts)
+        return self.deployed.functions.unstake(hash), opts

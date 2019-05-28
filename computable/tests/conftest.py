@@ -3,6 +3,7 @@ import json
 import pytest
 import web3
 from web3 import Web3
+from eth_keys import keys
 from computable.contracts.constants import SECONDS_IN_A_DAY
 from computable.contracts.ether_token import EtherToken
 from computable.contracts.market_token import MarketToken
@@ -12,6 +13,7 @@ from computable.contracts.investing import Investing
 from computable.contracts.datatrust import Datatrust
 from computable.contracts.listing import Listing
 
+# Web3
 @pytest.fixture(scope='module')
 def test_provider():
     return Web3.EthereumTesterProvider()
@@ -22,6 +24,20 @@ def w3(test_provider):
     instance.eth.defaultAccount = instance.eth.accounts[0] # our test 'owner' account
     return instance
 
+# User (when the default, unlocked accounts will not suffice)
+@pytest.fixture(scope='module')
+def passphrase():
+    return 'spam-eggs-vikings'
+
+@pytest.fixture(scope='module')
+def pk():
+    return keys.PrivateKey(b'\x01' * 32)
+
+@pytest.fixture(scope='module')
+def user(w3, pk, passphrase):
+    return w3.personal.importRawKey(pk.to_hex(), passphrase)
+
+# Contracts
 @pytest.fixture(scope='module')
 def ether_token_opts():
     return {'init_bal': Web3.toWei(1, 'ether')}

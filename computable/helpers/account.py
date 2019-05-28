@@ -1,5 +1,10 @@
 from computable.helpers.constants import UNLOCK_DURATION
 
+def lock(w3, acct=None):
+    if acct is None:
+        acct = w3.eth.defaultAccount
+    return w3.personal.lockAccount(acct)
+
 def unlock(w3, phrase, acct=None, timeout=None):
     """
     @param w3 The current instantiation of Web3
@@ -11,8 +16,3 @@ def unlock(w3, phrase, acct=None, timeout=None):
     if timeout is None:
         timeout = UNLOCK_DURATION
     return w3.personal.unlockAccount(acct, phrase, timeout)
-
-def lock(w3, acct=None):
-    if acct is None:
-        acct = w3.eth.defaultAccount
-    return w3.personal.lockAccount(acct)

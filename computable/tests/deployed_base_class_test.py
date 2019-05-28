@@ -11,7 +11,8 @@ def base_class(w3):
 def test_assign_transact_opts_empty(base_class):
     defaults = base_class.assign_transact_opts({})
     assert defaults['from'] == base_class.account
-    assert defaults['gas_price'] == GAS_PRICE
+    assert defaults['gasPrice'] == GAS_PRICE
+    assert defaults['chainId'] == None
     assert 'value' not in defaults
 
 def test_assign_transact_opts(base_class):

@@ -10,6 +10,8 @@ class Deployed:
         class instance
         """
         self.account = acct
+        # default the chain_id to None
+        self.chain_id = None
 
     def assign_transact_opts(self, src, opts=None):
         """
@@ -18,19 +20,21 @@ class Deployed:
         """
         if 'from' not in src:
             src['from'] = self.account
-        if 'gas_price' not in src:
-            src['gas_price'] = GAS_PRICE
+        if 'gasPrice' not in src:
+            src['gasPrice'] = GAS_PRICE
+        if 'chainId' not in src:
+            src['chainId'] = self.chain_id
 
         if opts is not None:
             src.update(opts)
         return src
 
-    def at(self, w3, address, filename):
+    def at(self, w3, address, filename, chain_id=None):
         """
         @param w3 An instance of Web3
         @param address EVM address of a deployed contract
         @param filename Name (with extension) of an abi file to read.
-        NOTE: We expect the file to be read to be a sibling to this file (same dir)
+        @param chain_id Identifier of the block chain `address` is on (or None)
         """
         abi = None
         path = os.path.join(os.path.dirname(__file__), filename)
@@ -48,6 +52,9 @@ class Deployed:
         self.address = address
         # remember the abi so we can fetch gas prices from it
         self.abi = abi
+        # set the passed in chainId if present
+        if chain_id is not None:
+            self.chain_id = chain_id
 
     def get_gas(self, method):
         """

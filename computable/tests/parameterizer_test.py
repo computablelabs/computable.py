@@ -2,6 +2,7 @@ import pytest
 import web3
 from web3 import Web3
 from computable.contracts.constants import SPREAD
+from computable.helpers.transaction import call, transact
 
 
 def test_deploy(parameterizer):
@@ -10,54 +11,54 @@ def test_deploy(parameterizer):
     assert parameterizer.account != parameterizer.address
 
 def test_get_be_pay(parameterizer_opts, parameterizer):
-    pay = parameterizer.get_backend_payment()
+    pay = call(parameterizer.get_backend_payment())
     assert pay == parameterizer_opts['backend_payment']
 
 def test_get_mk_pay(parameterizer_opts, parameterizer):
-    pay = parameterizer.get_maker_payment()
+    pay = call(parameterizer.get_maker_payment())
     assert pay == parameterizer_opts['maker_payment']
 
 def test_get_rs_pay(parameterizer_opts, parameterizer):
-    be = parameterizer.get_backend_payment()
-    mk = parameterizer.get_maker_payment()
-    pay = parameterizer.get_reserve_payment()
+    be = call(parameterizer.get_backend_payment())
+    mk = call(parameterizer.get_maker_payment())
+    pay = call(parameterizer.get_reserve_payment())
     assert pay == 100 - be - mk
 
 def test_get_cost_per(parameterizer_opts, parameterizer):
-    cost = parameterizer.get_cost_per_byte()
+    cost = call(parameterizer.get_cost_per_byte())
     assert cost == parameterizer_opts['cost_per_byte']
 
 def test_get_stake(parameterizer_opts, parameterizer):
-    stake = parameterizer.get_stake()
+    stake = call(parameterizer.get_stake())
     assert stake == parameterizer_opts['stake']
 
 def test_get_price_floor(parameterizer_opts, parameterizer):
-    price = parameterizer.get_price_floor()
+    price = call(parameterizer.get_price_floor())
     assert price == parameterizer_opts['price_floor']
 
 def test_get_price_floor(parameterizer_opts, parameterizer):
-    price = parameterizer.get_price_floor()
+    price = call(parameterizer.get_price_floor())
     assert price == parameterizer_opts['price_floor']
 
 def test_get_hash(parameterizer):
-    hash = parameterizer.get_hash(SPREAD, 115)
+    hash = call(parameterizer.get_hash(SPREAD, 115))
     other_hash = Web3.soliditySha3(['uint256', 'uint256'], [SPREAD, 115])
     assert hash == other_hash
 
 def test_get_spread(parameterizer_opts, parameterizer):
-    spread = parameterizer.get_spread()
+    spread = call(parameterizer.get_spread())
     assert spread == parameterizer_opts['spread']
 
 
 def test_get_list_reward(parameterizer_opts, parameterizer):
-    reward = parameterizer.get_list_reward()
+    reward = call(parameterizer.get_list_reward())
     assert reward == parameterizer_opts['list_reward']
 
 def test_get_plurality(parameterizer_opts, parameterizer):
-    pl = parameterizer.get_plurality()
+    pl = call(parameterizer.get_plurality())
     assert pl == parameterizer_opts['plurality']
 
 
 def test_get_vote_by(parameterizer_opts, parameterizer):
-    end = parameterizer.get_vote_by()
+    end = call(parameterizer.get_vote_by())
     assert end == parameterizer_opts['vote_by']

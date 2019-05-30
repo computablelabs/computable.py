@@ -4,14 +4,13 @@ import pytest
 import web3
 from web3 import Web3
 from eth_keys import keys
-from computable.contracts.constants import SECONDS_IN_A_DAY
-from computable.contracts.ether_token import EtherToken
-from computable.contracts.market_token import MarketToken
-from computable.contracts.voting import Voting
-from computable.contracts.parameterizer import Parameterizer
-from computable.contracts.investing import Investing
-from computable.contracts.datatrust import Datatrust
-from computable.contracts.listing import Listing
+from computable.contracts import EtherToken
+from computable.contracts import MarketToken
+from computable.contracts import Voting
+from computable.contracts import Parameterizer
+from computable.contracts import Investing
+from computable.contracts import Datatrust
+from computable.contracts import Listing
 
 # Web3
 @pytest.fixture(scope='module')

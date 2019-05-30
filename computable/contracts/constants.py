@@ -7,9 +7,6 @@ MIN_GAS = 21000
 # web3 will buffer estimated gas amounts by 100k so we'll do the same
 GAS_BUFFER = 100000
 
-# time based
-SECONDS_IN_A_DAY = 86400
-
 # parameterizer attributes are integers
 STAKE = 1
 PRICE_FLOOR = 2

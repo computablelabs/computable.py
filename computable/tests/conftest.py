@@ -8,7 +8,7 @@ from computable.contracts import EtherToken
 from computable.contracts import MarketToken
 from computable.contracts import Voting
 from computable.contracts import Parameterizer
-from computable.contracts import Investing
+from computable.contracts import Reserve
 from computable.contracts import Datatrust
 from computable.contracts import Listing
 
@@ -129,22 +129,22 @@ def parameterizer(w3, voting, parameterizer_opts):
     return instance
 
 @pytest.fixture(scope='module')
-def investing(w3, ether_token, market_token, parameterizer):
+def reserve(w3, ether_token, market_token, parameterizer):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'investing.abi')) as f:
+    with open(os.path.join(contract_path, 'reserve.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'investing.bin')) as f:
+    with open(os.path.join(contract_path, 'reserve.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(ether_token.address, market_token.address,
             parameterizer.address).transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
-    instance = Investing(w3.eth.defaultAccount)
+    instance = Reserve(w3.eth.defaultAccount)
     instance.at(w3, tx_rcpt['contractAddress'])
     return instance
 
 @pytest.fixture(scope='module')
-def datatrust(w3, ether_token, voting, parameterizer, investing):
+def datatrust(w3, ether_token, voting, parameterizer, reserve):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
     with open(os.path.join(contract_path, 'datatrust.abi')) as f:
         abi = json.loads(f.read())
@@ -152,14 +152,14 @@ def datatrust(w3, ether_token, voting, parameterizer, investing):
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(ether_token.address, voting.address,
-            parameterizer.address, investing.address).transact()
+            parameterizer.address, reserve.address).transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
     instance = Datatrust(w3.eth.defaultAccount)
     instance.at(w3, tx_rcpt['contractAddress'])
     return instance
 
 @pytest.fixture(scope='module')
-def listing(w3, market_token, voting, parameterizer, datatrust, investing):
+def listing(w3, market_token, voting, parameterizer, datatrust, reserve):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
     with open(os.path.join(contract_path, 'listing.abi')) as f:
         abi = json.loads(f.read())
@@ -167,7 +167,7 @@ def listing(w3, market_token, voting, parameterizer, datatrust, investing):
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(market_token.address, voting.address,
-            parameterizer.address, datatrust.address, investing.address).transact()
+            parameterizer.address, datatrust.address, reserve.address).transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
     instance = Listing(w3.eth.defaultAccount)
     instance.at(w3, tx_rcpt['contractAddress'])

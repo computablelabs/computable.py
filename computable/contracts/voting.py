@@ -20,7 +20,6 @@ class Voting(Deployed):
         return self.deployed.functions.getPrivileged(), opts
 
     def has_privilege(self, addr, opts=None):
-        # TODO change the casing when the abi is fixed
         opts = self.assign_transact_opts({'gas': self.get_gas('hasPrivilege')}, opts)
         return self.deployed.functions.hasPrivilege(addr), opts
 

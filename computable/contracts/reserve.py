@@ -6,7 +6,7 @@ class Reserve(Deployed):
 
     def get_support_price(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getSupportPrice')}, opts)
-        return self.deployed.functions.getInvestmentPrice(), opts
+        return self.deployed.functions.getSupportPrice(), opts
 
     def support(self, offer, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('support')}, opts)

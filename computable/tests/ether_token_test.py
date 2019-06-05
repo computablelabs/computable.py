@@ -95,6 +95,6 @@ def test_withdraw(w3, ether_token):
     new_user_bal = call(ether_token.balance_of(user))
     assert new_user_bal == 0
     rct = w3.eth.getTransactionReceipt(tx)
-    logs = ether_token.deployed.events.Withdraw().processReceipt(rct)
+    logs = ether_token.deployed.events.Withdrawn().processReceipt(rct)
     assert logs[0]['args']['to'] == user
     assert logs[0]['args']['amount'] == user_bal

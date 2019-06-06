@@ -19,3 +19,11 @@ class EtherToken(ERC20):
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('withdraw')}, opts)
         return self.deployed.functions.withdraw(amount), opts
+
+    def get_decimals(self, opts=None):
+        opts = self.assign_transact_opts({'gas': self.get_gas('decimals')}, opts)
+        return self.deployed.functions.decimals(), opts
+
+    def get_symbol(self, opts=None):
+        opts = self.assign_transact_opts({'gas': self.get_gas('symbol')}, opts)
+        return self.deployed.functions.symbol(), opts

@@ -19,11 +19,3 @@ class MarketToken(ERC20):
     def has_privilege(self, addr, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('hasPrivilege')}, opts)
         return self.deployed.functions.hasPrivilege(addr), opts
-
-    def get_decimals(self, opts=None):
-        opts = self.assign_transact_opts({'gas': self.get_gas('decimals')}, opts)
-        return self.deployed.functions.decimals(), opts
-
-    def get_symbol(self, opts=None):
-        opts = self.assign_transact_opts({'gas': self.get_gas('symbol')}, opts)
-        return self.deployed.functions.symbol(), opts

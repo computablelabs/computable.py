@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 test_deps = [
         "pytest==4.4.1",
         "eth-tester==0.1.0b39",
-        "web3==4.9.2",
+        "web3==5.0.0b2",
         "web3[tester]",
         ]
 

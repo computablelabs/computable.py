@@ -98,3 +98,11 @@ def test_withdraw(w3, ether_token):
     logs = ether_token.deployed.events.Withdrawn().processReceipt(rct)
     assert logs[0]['args']['to'] == user
     assert logs[0]['args']['amount'] == user_bal
+
+def test_decimals(ether_token):
+    decimals = call(ether_token.get_decimals())
+    assert decimals == 18
+
+def test_symbol(ether_token):
+    symbol = call(ether_token.get_symbol())
+    assert symbol == "CET"

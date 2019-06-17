@@ -32,3 +32,11 @@ class ERC20(Deployed):
     def transfer_from(self, source, to, amount, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('transferFrom')}, opts)
         return self.deployed.functions.transferFrom(source, to, amount), opts
+
+    def get_decimals(self, opts=None):
+        opts = self.assign_transact_opts({'gas': self.get_gas('decimals')}, opts)
+        return self.deployed.functions.decimals(), opts
+
+    def get_symbol(self, opts=None):
+        opts = self.assign_transact_opts({'gas': self.get_gas('symbol')}, opts)
+        return self.deployed.functions.symbol(), opts

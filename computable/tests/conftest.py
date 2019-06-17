@@ -34,7 +34,7 @@ def pk():
 
 @pytest.fixture(scope='module')
 def user(w3, pk, passphrase):
-    return w3.personal.importRawKey(pk.to_hex(), passphrase)
+    return w3.geth.personal.importRawKey(pk.to_hex(), passphrase)
 
 # Contracts
 @pytest.fixture(scope='module')

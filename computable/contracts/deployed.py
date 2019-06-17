@@ -16,13 +16,19 @@ class Deployed:
         @param src Dict containing any class hydrated transact opts
         @param opts Optional dict containing any user-supplied transact opts
         """
+        if opts is not None:
+            # allow a more pythonic gas_price than all this mixed case bullshit
+            if 'gas_price' in opts:
+                src['gasPrice'] = opts['gas_price']
+                del opts['gas_price']
+                # TODO are there any other 'transactOpts' we'd like to snake_case?
+            src.update(opts)
+
         if 'from' not in src:
             src['from'] = self.account
         if 'gasPrice' not in src:
             src['gasPrice'] = GAS_PRICE
 
-        if opts is not None:
-            src.update(opts)
         return src
 
     def at(self, w3, address, filename):

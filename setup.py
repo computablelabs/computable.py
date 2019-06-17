@@ -16,7 +16,7 @@ extras = {
 
 setuptools.setup(
         name="computable",
-        version="1.3.0",
+        version="2.0.0",
         author="computable.io",
         author_email="rob@computable.io",
         description="Higher Order Contracts and helpers for the Computable Protocol",

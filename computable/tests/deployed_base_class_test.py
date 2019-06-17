@@ -14,6 +14,10 @@ def test_assign_transact_opts_empty(base_class):
     assert defaults['gasPrice'] == GAS_PRICE
     assert 'value' not in defaults
 
+def test_assign_with_snake_cased(base_class):
+    opts = base_class.assign_transact_opts({}, {'gas_price': Web3.toWei(3, 'gwei')})
+    assert opts['gasPrice'] == Web3.toWei(3, 'gwei')
+
 def test_assign_transact_opts(base_class):
     opts = base_class.assign_transact_opts({'value': Web3.toWei(1, 'gwei')})
     assert opts['from'] == base_class.account

@@ -2,7 +2,7 @@ from computable.contracts.deployed import Deployed
 
 class Reserve(Deployed):
     def at(self, w3, address):
-        super().at(w3, address, 'reserve.abi')
+        super().at(w3, address, 'reserve')
 
     def get_support_price(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getSupportPrice')}, opts)

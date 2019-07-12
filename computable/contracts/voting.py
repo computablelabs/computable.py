@@ -2,18 +2,18 @@ from computable.contracts.deployed import Deployed
 
 class Voting(Deployed):
     def at(self, w3, address):
-        super().at(w3, address, 'voting.abi')
+        super().at(w3, address, 'voting')
 
-    def set_privileged(self, parameterizer, datatrust, listing, reserve, opts=None):
+    def set_privileged(self, parameterizer, reserve, datatrust, listing, opts=None):
         """
         @param parameterizer Address
+        @param reserve Address
         @param datatrust Address
         @param listing Address
-        @param reserve Address
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('setPrivileged')}, opts)
-        return self.deployed.functions.setPrivileged(parameterizer, datatrust,
-                listing, reserve), opts
+        return self.deployed.functions.setPrivileged(parameterizer, reserve,
+            datatrust, listing), opts
 
     def get_privileged(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getPrivileged')}, opts)

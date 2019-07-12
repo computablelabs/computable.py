@@ -2,7 +2,7 @@ from computable.contracts.erc20 import ERC20
 
 class EtherToken(ERC20):
     def at(self, w3, address):
-        super().at(w3, address, 'ethertoken.abi')
+        super().at(w3, address, 'ethertoken')
 
     def deposit(self, amount, opts=None):
         """

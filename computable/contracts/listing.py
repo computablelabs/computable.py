@@ -2,7 +2,7 @@ from computable.contracts.deployed import Deployed
 
 class Listing(Deployed):
     def at(self, w3, address):
-        super().at(w3, address, 'listing.abi')
+        super().at(w3, address, 'listing')
 
     def is_listed(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('isListed')}, opts)

@@ -2,7 +2,7 @@ from computable.contracts.deployed import Deployed
 
 class Parameterizer(Deployed):
     def at(self, w3, address):
-        super().at(w3, address, 'parameterizer.abi')
+        super().at(w3, address, 'parameterizer')
 
     def get_backend_payment(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getBackendPayment')}, opts)

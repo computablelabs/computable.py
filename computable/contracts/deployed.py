@@ -38,7 +38,7 @@ class Deployed:
         @param filename Name (with extension) of an abi file to read.
         """
         abi = None
-        path = os.path.join(os.path.dirname(__file__), filename)
+        path = os.path.join(os.path.dirname(__file__), filename, '%s.abi'%(filename))
         with open(path) as f:
             abi = json.loads(f.read())
         if abi is None:

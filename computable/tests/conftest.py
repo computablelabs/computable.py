@@ -44,9 +44,9 @@ def ether_token_opts():
 @pytest.fixture(scope='module')
 def ether_token(w3, ether_token_opts):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'ethertoken.abi')) as f:
+    with open(os.path.join(contract_path, 'ethertoken', 'ethertoken.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'ethertoken.bin')) as f:
+    with open(os.path.join(contract_path, 'ethertoken', 'ethertoken.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(w3.eth.defaultAccount,
@@ -63,9 +63,9 @@ def market_token_opts():
 @pytest.fixture(scope='module')
 def market_token(w3, market_token_opts):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'markettoken.abi')) as f:
+    with open(os.path.join(contract_path, 'markettoken', 'markettoken.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'markettoken.bin')) as f:
+    with open(os.path.join(contract_path, 'markettoken', 'markettoken.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(w3.eth.defaultAccount,
@@ -78,9 +78,9 @@ def market_token(w3, market_token_opts):
 @pytest.fixture(scope='module')
 def voting(w3, market_token):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'voting.abi')) as f:
+    with open(os.path.join(contract_path, 'voting', 'voting.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'voting.bin')) as f:
+    with open(os.path.join(contract_path, 'voting', 'voting.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(market_token.address).transact()
@@ -106,9 +106,9 @@ def parameterizer_opts():
 @pytest.fixture(scope='module')
 def parameterizer(w3, voting, parameterizer_opts):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'parameterizer.abi')) as f:
+    with open(os.path.join(contract_path, 'parameterizer', 'parameterizer.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'parameterizer.bin')) as f:
+    with open(os.path.join(contract_path, 'parameterizer', 'parameterizer.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(
@@ -131,9 +131,9 @@ def parameterizer(w3, voting, parameterizer_opts):
 @pytest.fixture(scope='module')
 def reserve(w3, ether_token, market_token, parameterizer):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'reserve.abi')) as f:
+    with open(os.path.join(contract_path, 'reserve', 'reserve.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'reserve.bin')) as f:
+    with open(os.path.join(contract_path, 'reserve', 'reserve.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(ether_token.address, market_token.address,
@@ -146,9 +146,9 @@ def reserve(w3, ether_token, market_token, parameterizer):
 @pytest.fixture(scope='module')
 def datatrust(w3, ether_token, voting, parameterizer, reserve):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'datatrust.abi')) as f:
+    with open(os.path.join(contract_path, 'datatrust', 'datatrust.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'datatrust.bin')) as f:
+    with open(os.path.join(contract_path, 'datatrust', 'datatrust.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(ether_token.address, voting.address,
@@ -161,9 +161,9 @@ def datatrust(w3, ether_token, voting, parameterizer, reserve):
 @pytest.fixture(scope='module')
 def listing(w3, market_token, voting, parameterizer, datatrust, reserve):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
-    with open(os.path.join(contract_path, 'listing.abi')) as f:
+    with open(os.path.join(contract_path, 'listing', 'listing.abi')) as f:
         abi = json.loads(f.read())
-    with open(os.path.join(contract_path, 'listing.bin')) as f:
+    with open(os.path.join(contract_path, 'listing', 'listing.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(market_token.address, voting.address,

@@ -16,7 +16,7 @@ extras = {
 
 setuptools.setup(
         name="computable",
-        version="2.0.0",
+        version="2.0.1",
         author="computable.io",
         author_email="rob@computable.io",
         description="Higher Order Contracts and helpers for the Computable Protocol",
@@ -35,6 +35,6 @@ setuptools.setup(
         tests_require=test_deps,
         extras_require=extras,
         package_data={
-            "":["*.abi", "*.bin"],
+            "":["**/*.abi", "**/*.bin"],
             }
         )

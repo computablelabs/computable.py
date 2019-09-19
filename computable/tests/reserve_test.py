@@ -34,6 +34,7 @@ def test_support(w3, ether_token, market_token, reserve, listing):
     user_bal = call(ether_token.balance_of(user))
     assert user_bal == 0
 
+    # Deposit ETH in EtherToken
     tx = transact(ether_token.deposit(
         Web3.toWei(1, 'ether'), {'from': user}))
     rct = w3.eth.waitForTransactionReceipt(tx)
@@ -41,6 +42,7 @@ def test_support(w3, ether_token, market_token, reserve, listing):
     assert new_user_bal == Web3.toWei(1, 'ether')
     assert rct['status'] == 1
 
+    # Approve the spend
     old_allowance = call(ether_token.allowance(user, reserve.address))
     assert old_allowance == 0
     tx= transact(ether_token.approve(reserve.address, Web3.toWei(1, 'ether'), opts={'from': user}))

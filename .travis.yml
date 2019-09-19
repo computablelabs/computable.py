@@ -3,6 +3,6 @@ python:
   - "3.6"
 install:
   - pip install -r requirements.txt
-  - pip install -U web3[tester]
+  - pip install -U web3[tester]==5.0.2
 script:
   - pytest

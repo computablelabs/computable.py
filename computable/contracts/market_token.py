@@ -12,6 +12,13 @@ class MarketToken(ERC20):
         opts = self.assign_transact_opts({'gas': self.get_gas('setPrivileged')}, opts)
         return self.deployed.functions.setPrivileged(reserve, listing), opts
 
+    def mint(self, amount, opts=None):
+        """
+        @param amount amount to mint 
+        """
+        opts = self.assign_transact_opts({'gas': self.get_gas('mint')}, opts)
+        return self.deployed.functions.mint(amount), opts
+
     def get_privileged(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('getPrivileged')}, opts)
         return self.deployed.functions.getPrivileged(), opts

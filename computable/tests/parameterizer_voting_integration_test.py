@@ -7,13 +7,6 @@ from computable.helpers.transaction import call, transact
 def test_set_privileged(w3, voting, parameterizer):
     # we can set the real p11r address and 3 imposters for this test
     priv = call(voting.has_privilege(parameterizer.address))
-    assert priv == False
-    # voting acct is the owner address
-    tx = transact(voting.set_privileged(parameterizer.address, w3.eth.accounts[7],
-            w3.eth.accounts[8], w3.eth.accounts[9]))
-    # wait for this to be mined
-    rct = w3.eth.waitForTransactionReceipt(tx)
-    priv = call(voting.has_privilege(parameterizer.address))
     assert priv == True
 
 def test_reparameterize(w3, parameterizer):

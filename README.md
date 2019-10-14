@@ -22,12 +22,7 @@ We highly recommend you set up a virtual environment to have a clean
 development environment.
 
     git clone https://github.com/computablelabs/computable.py.git
-    git submodule init 
-    git submodule update --remote
     python setup.py install
-
-Note you only need to initialize the submodule the first time you clone
-this repo.
 
 ## Running Tests
 

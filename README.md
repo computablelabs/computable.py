@@ -29,3 +29,9 @@ development environment.
 To run the tests, you simply invoke `pytest`:
 
     python -m pytest
+
+## Getting Help
+
+If you're having trouble using this library, log into the
+[Computable discord server](https://discord.gg/3mFF8zy). Members of the
+development team hang out there and might be able to help with your questions.

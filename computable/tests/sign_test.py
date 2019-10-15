@@ -22,12 +22,24 @@ def test_send_some_eth(w3, user):
     new_user_bal = w3.eth.getBalance(user)
     assert new_user_bal == Web3.toWei(1, 'finney')
 
-def test_send_some_ether_token(w3, user, ether_token):
+def test_send_some_ether_token(w3, pk, user, ether_token):
+    user_eth_bal = w3.eth.getBalance(user)
+    assert user_eth_bal > 0
     user_bal = tx_helpers.call(ether_token.balance_of(user))
     assert user_bal == 0
-    tx = tx_helpers.transact(ether_token.transfer(user, Web3.toWei(1, 'gwei')))
+    # Let's deposit 1 ether token in user's account 
+    tup = ether_token.deposit(Web3.toWei(1, 'gwei'), {'from': user})
+    tx = tx_helpers.send(w3, pk.to_bytes(), tup)
+    rct = w3.eth.waitForTransactionReceipt(tx)
     new_user_bal = tx_helpers.call(ether_token.balance_of(user))
     assert new_user_bal == Web3.toWei(1, 'gwei')
+
+    # Let's send this to the default account
+    tup = ether_token.transfer(w3.eth.defaultAccount, Web3.toWei(1, 'gwei'), {'from': user})
+    tx2 = tx_helpers.send(w3, pk.to_bytes(), tup)
+    final_user_bal = tx_helpers.call(ether_token.balance_of(user))
+    ##assert new_user_bal == Web3.toWei(1, 'gwei')
+    assert final_user_bal == 0 
 
 def test_build_sign_send_transaction(w3, pk, user, ether_token):
     """
@@ -38,8 +50,14 @@ def test_build_sign_send_transaction(w3, pk, user, ether_token):
     other_user = w3.eth.accounts[1] # we'll send some tokens to this target
     other_user_bal = tx_helpers.call(ether_token.balance_of(other_user))
     assert other_user_bal == 0
+    # Let's deposit 1 ether token in user's account 
+    tup = ether_token.deposit(Web3.toWei(1, 'gwei'), {'from': user})
+    tx = tx_helpers.send(w3, pk.to_bytes(), tup)
+    rct = w3.eth.waitForTransactionReceipt(tx)
+    user_bal = tx_helpers.call(ether_token.balance_of(user))
+    assert user_bal == Web3.toWei(1, 'gwei')
     # all computable.py HOC methods return a tuple in the form: (tx, opts)
-    tup = ether_token.transfer(other_user, Web3.toWei(1, 'kwei'), {'from': user})
+    tup = ether_token.transfer(other_user, Web3.toWei(1, 'gwei'), {'from': user})
     # these may be passed directly to build...
     built_tx = tx_helpers.build_transaction(w3, tup)
     assert built_tx['from'] == user
@@ -53,7 +71,7 @@ def test_build_sign_send_transaction(w3, pk, user, ether_token):
     final_tx = tx_helpers.send_raw_transaction(w3, signed_tx)
     rct = w3.eth.waitForTransactionReceipt(final_tx)
     other_user_new_bal = tx_helpers.call(ether_token.balance_of(other_user))
-    assert other_user_new_bal == Web3.toWei(1, 'kwei')
+    assert other_user_new_bal == Web3.toWei(1, 'gwei')
 
 def test_send(w3, pk, user, ether_token):
     """
@@ -62,7 +80,13 @@ def test_send(w3, pk, user, ether_token):
     other_user = w3.eth.accounts[2] # we'll send some tokens to this target
     other_user_bal = tx_helpers.call(ether_token.balance_of(other_user))
     assert other_user_bal == 0
-    tx = tx_helpers.send(w3, pk.to_bytes(), ether_token.transfer(other_user, Web3.toWei(1, 'kwei'), {'from': user}))
+    # Let's deposit 1 ether token in user's account 
+    tup = ether_token.deposit(Web3.toWei(1, 'gwei'), {'from': user})
+    tx = tx_helpers.send(w3, pk.to_bytes(), tup)
+    rct = w3.eth.waitForTransactionReceipt(tx)
+    user_bal = tx_helpers.call(ether_token.balance_of(user))
+    assert user_bal == Web3.toWei(1, 'gwei')
+    tx = tx_helpers.send(w3, pk.to_bytes(), ether_token.transfer(other_user, Web3.toWei(1, 'gwei'), {'from': user}))
     rct = w3.eth.waitForTransactionReceipt(tx)
     other_user_new_bal = tx_helpers.call(ether_token.balance_of(other_user))
-    assert other_user_new_bal == Web3.toWei(1, 'kwei')
+    assert other_user_new_bal == Web3.toWei(1, 'gwei')

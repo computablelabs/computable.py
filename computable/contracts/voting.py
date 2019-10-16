@@ -4,7 +4,7 @@ class Voting(Deployed):
     def at(self, w3, address):
         super().at(w3, address, 'voting')
 
-    def set_privileged(self, parameterizer, reserve, datatrust, listing, opts=None):
+    def set_privileged(self, parameterizer, datatrust, listing, opts=None):
         """
         @param parameterizer Address
         @param reserve Address
@@ -12,7 +12,7 @@ class Voting(Deployed):
         @param listing Address
         """
         opts = self.assign_transact_opts({'gas': self.get_gas('setPrivileged')}, opts)
-        return self.deployed.functions.setPrivileged(parameterizer, reserve,
+        return self.deployed.functions.setPrivileged(parameterizer,
             datatrust, listing), opts
 
     def get_privileged(self, opts=None):

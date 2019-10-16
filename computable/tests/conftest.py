@@ -42,19 +42,14 @@ def user(w3, pk, passphrase):
 
 # Contracts
 @pytest.fixture(scope='module')
-def ether_token_opts():
-    return {'init_bal': Web3.toWei(1, 'ether')}
-
-@pytest.fixture(scope='module')
-def ether_token(w3, ether_token_opts):
+def ether_token(w3):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
     with open(os.path.join(contract_path, 'ethertoken', 'ethertoken.abi')) as f:
         abi = json.loads(f.read())
     with open(os.path.join(contract_path, 'ethertoken', 'ethertoken.bin')) as f:
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
-    tx_hash = deployed.constructor(w3.eth.defaultAccount,
-        ether_token_opts['init_bal']).transact()
+    tx_hash = deployed.constructor().transact()
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
     instance = EtherToken(w3.eth.defaultAccount)
     instance.at(w3, tx_rcpt['contractAddress'])
@@ -111,7 +106,7 @@ def parameterizer_opts():
             }
 
 @pytest.fixture(scope='module')
-def parameterizer(w3, voting_pre, parameterizer_opts):
+def parameterizer(w3, market_token_pre, voting_pre, parameterizer_opts):
     contract_path = os.path.join(os.path.dirname(__file__), os.pardir, 'contracts')
     with open(os.path.join(contract_path, 'parameterizer', 'parameterizer.abi')) as f:
         abi = json.loads(f.read())
@@ -119,6 +114,7 @@ def parameterizer(w3, voting_pre, parameterizer_opts):
         bc = f.read()
     deployed = w3.eth.contract(abi=abi, bytecode=bc.rstrip('\n'))
     tx_hash = deployed.constructor(
+            market_token_pre.address,
             voting_pre.address,
             parameterizer_opts['price_floor'],
             parameterizer_opts['spread'],
@@ -191,7 +187,7 @@ def market_token(w3, market_token_pre, reserve, listing):
 
 @pytest.fixture(scope='module')
 def voting(w3, voting_pre, parameterizer, reserve, datatrust_pre, listing):
-    tx_hash = transact(voting_pre.set_privileged(parameterizer.address, reserve.address, datatrust_pre.address, listing.address))
+    tx_hash = transact(voting_pre.set_privileged(parameterizer.address, datatrust_pre.address, listing.address))
     tx_rcpt = w3.eth.waitForTransactionReceipt(tx_hash)
     return voting_pre
 

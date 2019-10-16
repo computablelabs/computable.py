@@ -9,15 +9,11 @@ def test_deploy(ether_token):
     assert len(ether_token.address) == 42
     assert ether_token.account != ether_token.address
 
-def test_initial_balance(ether_token):
-    owner_bal = call(ether_token.balance_of(ether_token.account))
-    assert owner_bal == Web3.toWei(1, 'ether')
-
 # NOTE: Testing the ERC20 methods in EtherToken in addition to its additional methods
 def test_approve_and_allowance(w3, ether_token):
     # exact gas amounts are known
     gas = ether_token.get_gas('approve')
-    assert gas == 37719 + GAS_BUFFER # looked up manually in the abi
+    assert gas == 37763 + GAS_BUFFER # looked up manually in the abi
     spender = w3.eth.accounts[1]
     # passing empty opts assures all defaults are used
     tx = transact(ether_token.approve(spender, Web3.toWei(1, 'gwei')))
@@ -28,17 +24,17 @@ def test_approve_and_allowance(w3, ether_token):
     logs = ether_token.deployed.events.Approval().processReceipt(rct)
     assert logs[0]['args']['amount'] == Web3.toWei(1, 'gwei')
 
-def test_decrease_approval(w3, ether_token):
+def test_decrease_allowance(w3, ether_token):
     spender = w3.eth.accounts[1]
     old_allowed = call(ether_token.allowance(ether_token.account, w3.eth.accounts[1]))
-    transact(ether_token.decrease_approval(spender, Web3.toWei(1, 'mwei')))
+    transact(ether_token.decrease_allowance(spender, Web3.toWei(1, 'mwei')))
     new_allowed = call(ether_token.allowance(ether_token.account, w3.eth.accounts[1]))
     assert new_allowed == old_allowed - Web3.toWei(1, 'mwei')
 
-def test_increase_approval(w3, ether_token):
+def test_increase_allowance(w3, ether_token):
     spender = w3.eth.accounts[1]
     old_allowed = call(ether_token.allowance(ether_token.account, w3.eth.accounts[1]))
-    transact(ether_token.increase_approval(spender, Web3.toWei(1, 'kwei')))
+    transact(ether_token.increase_allowance(spender, Web3.toWei(1, 'kwei')))
     new_allowed = call(ether_token.allowance(ether_token.account, w3.eth.accounts[1]))
     assert new_allowed == old_allowed + Web3.toWei(1, 'kwei')
 
@@ -58,15 +54,19 @@ def test_total_supply(ether_token):
 
 def test_transfer(w3, ether_token):
     user = w3.eth.accounts[3]
+    other = w3.eth.accounts[4]
     user_bal = call(ether_token.balance_of(user))
+    other_bal = call(ether_token.balance_of(other))
     assert user_bal == 0
-    owner_bal = call(ether_token.balance_of(ether_token.account))
-    # the default account is the initial balance holder here, so that works
-    tx = transact(ether_token.transfer(user, Web3.toWei(1, 'gwei')))
+    assert other_bal == 0
+    # Let's deposit 1 ether token in user's account 
+    transact(ether_token.deposit(Web3.toWei(1, 'gwei'), {'from': user}))
+    # Let's send this to other 
+    tx = transact(ether_token.transfer(other, Web3.toWei(1, 'gwei'), {'from': user}))
     new_user_bal = call(ether_token.balance_of(user))
-    new_owner_bal = call(ether_token.balance_of(ether_token.account))
-    assert new_user_bal == Web3.toWei(1, 'gwei')
-    assert new_owner_bal == owner_bal - Web3.toWei(1, 'gwei')
+    new_other_bal = call(ether_token.balance_of(other))
+    assert new_user_bal == 0 
+    assert new_other_bal == Web3.toWei(1, 'gwei')
     # event published...
     rct = w3.eth.getTransactionReceipt(tx)
     logs = ether_token.deployed.events.Transfer().processReceipt(rct)

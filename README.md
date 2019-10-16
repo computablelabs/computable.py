@@ -16,8 +16,22 @@ below.
     pip install -r requirements.txt
     pip install -U web3[tester]
 
+## Setup for Development 
+
+We highly recommend you set up a virtual environment to have a clean
+development environment.
+
+    git clone https://github.com/computablelabs/computable.py.git
+    python setup.py install
+
 ## Running Tests
 
 To run the tests, you simply invoke `pytest`:
 
-    pytest
+    python -m pytest
+
+## Getting Help
+
+If you're having trouble using this library, log into the
+[Computable discord server](https://discord.gg/3mFF8zy). Members of the
+development team hang out there and might be able to help with your questions.

@@ -13,13 +13,13 @@ class ERC20(Deployed):
         opts = self.assign_transact_opts({'gas': self.get_gas('balanceOf')}, opts)
         return self.deployed.functions.balanceOf(owner), opts
 
-    def decrease_approval(self, spender, amount, opts=None):
+    def decrease_allowance(self, spender, amount, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('decreaseApproval')}, opts)
-        return self.deployed.functions.decreaseApproval(spender, amount), opts
+        return self.deployed.functions.decreaseAllowance(spender, amount), opts
 
-    def increase_approval(self, spender, amount, opts=None):
+    def increase_allowance(self, spender, amount, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('increaseApproval')}, opts)
-        return self.deployed.functions.increaseApproval(spender, amount), opts
+        return self.deployed.functions.increaseAllowance(spender, amount), opts
 
     def total_supply(self, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('totalSupply')}, opts)

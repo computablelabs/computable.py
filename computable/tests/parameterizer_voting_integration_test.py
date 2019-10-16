@@ -4,12 +4,16 @@ from web3 import Web3
 from computable.contracts.constants import PLURALITY, REPARAM
 from computable.helpers.transaction import call, transact
 
-def test_set_privileged(w3, ether_token, voting, parameterizer, reserve,):
+def test_set_privileged(w3, voting, parameterizer, datatrust, listing):
     # Check privilege set correctly 
     priv = call(voting.has_privilege(parameterizer.address))
     assert priv == True
+    priv = call(voting.has_privilege(datatrust.address))
+    assert priv == True
+    priv = call(voting.has_privilege(listing.address))
+    assert priv == True
 
-def test_reparameterize(w3, ether_token, market_token, voting, parameterizer, reserve, listing):
+def test_reparameterize(w3, ether_token, market_token, voting, parameterizer, reserve):
     # Set market token privileges before this test
     priv = call(market_token.has_privilege(reserve.address))
     assert priv == True

@@ -66,6 +66,6 @@ class Parameterizer(Deployed):
         opts = self.assign_transact_opts({'gas': self.get_gas('reparameterize')}, opts)
         return self.deployed.functions.reparameterize(param, value), opts
 
-    def resolveReparam(self, hash, opts=None):
+    def resolve_reparam(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('resolveReparam')}, opts)
         return self.deployed.functions.resolveReparam(hash), opts

@@ -27,9 +27,9 @@ class Listing(Deployed):
         opts = self.assign_transact_opts({'gas': self.get_gas('resolveApplication')}, opts)
         return self.deployed.functions.resolveApplication(hash), opts
 
-    def claim_bytes_accessed(self, hash, opts=None):
-        opts = self.assign_transact_opts({'gas': self.get_gas('claimBytesAccessed')}, opts)
-        return self.deployed.functions.claimBytesAccessed(hash), opts
+    def claim_access_reward(self, hash, opts=None):
+        opts = self.assign_transact_opts({'gas': self.get_gas('claimAccessReward')}, opts)
+        return self.deployed.functions.claimAccessReward(hash), opts
 
     def challenge(self, hash, opts=None):
         opts = self.assign_transact_opts({'gas': self.get_gas('challenge')}, opts)
